@@ -6,53 +6,53 @@ var EventHandlers = {
 	releaseY : null, 
 	onMouseEnd:function(e) {
 		// basically setting globals clickY and clickX to where click or touch event ended...:
-		var newKey, mouseIsDown = false;
+		var newKey;
 
 		if (e.changedTouches && e.changedTouches.length > 0) {
-			releaseX = e.changedTouches[0].pageX;
-			releaseY = e.changedTouches[0].pageY;
+			EventHandlers.releaseX = e.changedTouches[0].pageX;
+			EventHandlers.releaseY = e.changedTouches[0].pageY;
 
 			// determine greatest swipe directional velocity:
-			var xOry = (Math.abs(releaseX - clickX) > Math.abs(releaseY - clickY)) ? "x" : "y";
+			var xOry = (Math.abs(EventHandlers.releaseX - EventHandlers.clickX) > Math.abs(EventHandlers.releaseY - EventHandlers.clickY)) ? "x" : "y";
 
 			switch (xOry) {
 
 				case 'x':
-					if (Math.abs(releaseX - clickX) > 80) {
-						if (releaseX - clickX > 0) {// moved x in a positive way
+					if (Math.abs(EventHandlers.releaseX - EventHandlers.clickX) > 80) {
+						if (EventHandlers.releaseX - EventHandlers.clickX > 0) {// moved x in a positive way
 							// show menu...
-							makeMenuVisible();
+							EventHandlers.moveCenterItemHorizontally("left");
 						} else {// moved x in a nagative way
 							// show settings
-							makeSettingsVisible();
+							EventHandlers.moveCenterItemHorizontally("right");
 						}
 					}
 					break;
 			} // end case 'x'
 		} else {
-			releaseX = e.pageX;
-			releaseY = e.pageY;
+			EventHandlers.releaseX = e.pageX;
+			EventHandlers.releaseY = e.pageY;
 		}
 	}, 
 	onMouseStart	: function(e) {
 		// basically setting globals clickY and clickX to where click or touch event started...:
 		if (e.changedTouches && e.changedTouches.length > 0) {
-			clickX = e.changedTouches[0].pageX;
-			clickY = e.changedTouches[0].pageY;
+			EventHandlers.clickX = e.changedTouches[0].pageX;
+			EventHandlers.clickY = e.changedTouches[0].pageY;
 		} else {
-			clickX = e.pageX;
-			clickY = e.pageY;
+			EventHandlers.clickX = e.pageX;
+			EventHandlers.clickY = e.pageY;
 		}
 
 		// and set global indicator that mouse is being dragged
-		mouseIsDown = true;
+		EventHandlers.mouseIsDown = true;
 	},
-	moveCenterItemHorizontally : function() {
-		//console.log("horiz was called...");
+	moveCenterItemHorizontally : function(direction) {
+		console.log("horiz was called..." + direction);
 		var hidden = $('.center');
 		if (!hidden.hasClass('visible')) {
 			hidden.animate({
-				"left" : "160px"
+				"left" : (direction==="right"?"160px":"-160px")
 			}, "200").addClass('visible');
 		} else {
 			hidden.animate({
@@ -63,10 +63,10 @@ var EventHandlers = {
 	registerEventHandlers : function() {
 		//console.log("eh was called...");
 		$('#showMenu').on("click", function(){
-			EventHandlers.moveCenterItemHorizontally();
+			EventHandlers.moveCenterItemHorizontally("right");
 		});
-		$("showSettings").on("click", function(){
-			this.moveCenterItemHorizontally("left");
+		$("#showSettings").on("click", function(){
+			EventHandlers.moveCenterItemHorizontally("left");
 		});
 
 		$('body').on('mousedown', function(){
