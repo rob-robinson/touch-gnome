@@ -1,4 +1,9 @@
 var EventHandlers = {
+	mouseIsDown : false, 
+	clickX : null, 
+	clickY : null, 
+	releaseX : null, 
+	releaseY : null, 
 	onMouseEnd:function(e) {
 		// basically setting globals clickY and clickX to where click or touch event ended...:
 		var newKey, mouseIsDown = false;
@@ -42,14 +47,34 @@ var EventHandlers = {
 		// and set global indicator that mouse is being dragged
 		mouseIsDown = true;
 	},
-	registerEventHandlers : function(){
-		document.getElementById("showMenu").addEventListener("click", makeMenuVisible);
-		document.getElementById("showSettings").addEventListener("click", makeSettingsVisible);
+	moveCenterItemHorizontally : function() {
+		console.log("horiz was called...");
+		var hidden = $('.center');
+		if (!hidden.hasClass('visible')) {
+			hidden.animate({
+				"left" : "160px"
+			}, "200").addClass('visible');
+		} else {
+			hidden.animate({
+				"left" : "0px"
+			}, "200").removeClass('visible');
+		}
+	}, 
+	registerEventHandlers : function() {
+		console.log("eh was called...");
+		$('#showMenu').on("click", function(){
+			EventHandlers.moveCenterItemHorizontally();
+		});
+		//document.getElementById("showSettings").addEventListener("click", this.moveCenterItemHorizontally("left"));
 
-		document.body.addEventListener('mousedown', onMouseStart, false);
-		document.body.addEventListener('mouseup', onMouseEnd, false);
+		//$('body').on('mousedown', this.onMouseStart);
+		//$('body').on('mouseup', this.onMouseEnd);
 
-		document.body.addEventListener('touchstart', onMouseStart, false);
-		document.body.addEventListener('touchend', onMouseEnd, false);
+		//$('body').on('touchstart', this.onMouseStart);
+		//$('body').on('touchend', this.onMouseEnd);
 	}
 };
+
+$(window).on('load',function(){
+	EventHandlers.registerEventHandlers();
+});

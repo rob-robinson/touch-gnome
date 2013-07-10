@@ -1,0 +1,6 @@
+.wrapper { width:100%;}
+.left, .right, .center {width:30%; display:inline;}
+.left{float:left;}
+.right{float:right;}
+.visible{position:absolute;}
+.clearme{clear:both;}
