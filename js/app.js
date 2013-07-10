@@ -65,7 +65,9 @@ var EventHandlers = {
 		$('#showMenu').on("click", function(){
 			EventHandlers.moveCenterItemHorizontally();
 		});
-		//document.getElementById("showSettings").addEventListener("click", this.moveCenterItemHorizontally("left"));
+		$("showSettings").on("click", function(){
+			this.moveCenterItemHorizontally("left");
+		});
 
 		$('body').on('mousedown', function(){
 			EventHandlers.onMouseStart;
