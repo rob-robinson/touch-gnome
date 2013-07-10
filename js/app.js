@@ -48,7 +48,7 @@ var EventHandlers = {
 		mouseIsDown = true;
 	},
 	moveCenterItemHorizontally : function() {
-		console.log("horiz was called...");
+		//console.log("horiz was called...");
 		var hidden = $('.center');
 		if (!hidden.hasClass('visible')) {
 			hidden.animate({
@@ -61,17 +61,25 @@ var EventHandlers = {
 		}
 	}, 
 	registerEventHandlers : function() {
-		console.log("eh was called...");
+		//console.log("eh was called...");
 		$('#showMenu').on("click", function(){
 			EventHandlers.moveCenterItemHorizontally();
 		});
 		//document.getElementById("showSettings").addEventListener("click", this.moveCenterItemHorizontally("left"));
 
-		//$('body').on('mousedown', this.onMouseStart);
-		//$('body').on('mouseup', this.onMouseEnd);
+		$('body').on('mousedown', function(){
+			EventHandlers.onMouseStart;
+		});
+		$('body').on('mouseup', function(){
+			EventHandlers.onMouseEnd;
+		});
 
-		//$('body').on('touchstart', this.onMouseStart);
-		//$('body').on('touchend', this.onMouseEnd);
+		$('body').on('touchstart', function(){
+			EventHandlers.onMouseStart;
+		});
+		$('body').on('touchend', function(){
+			EventHandlers.onMouseEnd;
+		});
 	}
 };
 
