@@ -1,90 +1,141 @@
-var EventHandlers = {
-	mouseIsDown : false, 
-	clickX : null, 
-	clickY : null, 
-	releaseX : null, 
-	releaseY : null, 
-	onMouseEnd:function(e) {
-		// basically setting globals clickY and clickX to where click or touch event ended...:
-		var newKey;
 
-		if (e.changedTouches && e.changedTouches.length > 0) {
-			EventHandlers.releaseX = e.changedTouches[0].pageX;
-			EventHandlers.releaseY = e.changedTouches[0].pageY;
+var mouseIsDown = false;
+var clickX;
+var clickY;
+var releaseX;
+var releaseY;
 
-			// determine greatest swipe directional velocity:
-			var xOry = (Math.abs(EventHandlers.releaseX - EventHandlers.clickX) > Math.abs(EventHandlers.releaseY - EventHandlers.clickY)) ? "x" : "y";
+var happy = new Image();
+happy.src = "./img/gnome-happy.jpg";
 
-			switch (xOry) {
+var mad = new Image();
+mad.src = "./img/gnome-mad.jpg";
 
-				case 'x':
-					if (Math.abs(EventHandlers.releaseX - EventHandlers.clickX) > 80) {
-						if (EventHandlers.releaseX - EventHandlers.clickX > 0) {// moved x in a positive way
-							// show menu...
-							EventHandlers.moveCenterItemHorizontally("left");
-						} else {// moved x in a nagative way
-							// show settings
-							EventHandlers.moveCenterItemHorizontally("right");
-						}
-					}
-					break;
-			} // end case 'x'
-		} else {
-			EventHandlers.releaseX = e.pageX;
-			EventHandlers.releaseY = e.pageY;
-		}
-	}, 
-	onMouseStart	: function(e) {
-		// basically setting globals clickY and clickX to where click or touch event started...:
-		if (e.changedTouches && e.changedTouches.length > 0) {
-			EventHandlers.clickX = e.changedTouches[0].pageX;
-			EventHandlers.clickY = e.changedTouches[0].pageY;
-		} else {
-			EventHandlers.clickX = e.pageX;
-			EventHandlers.clickY = e.pageY;
-		}
+var left = new Image();
+left.src = "./img/gnome-left.jpg";
 
-		// and set global indicator that mouse is being dragged
-		EventHandlers.mouseIsDown = true;
-	},
-	moveCenterItemHorizontally : function(direction) {
-		console.log("horiz was called..." + direction);
-		var hidden = $('.center');
-		if (!hidden.hasClass('visible')) {
-			hidden.animate({
-				"left" : (direction==="right"?"160px":"-160px")
-			}, "200").addClass('visible');
-		} else {
-			hidden.animate({
-				"left" : "0px"
-			}, "200").removeClass('visible');
-		}
-	}, 
-	registerEventHandlers : function() {
-		//console.log("eh was called...");
-		$('#showMenu').on("click", function(){
-			EventHandlers.moveCenterItemHorizontally("right");
-		});
-		$("#showSettings").on("click", function(){
-			EventHandlers.moveCenterItemHorizontally("left");
-		});
+var right = new Image();
+right.src = "./img/gnome-right.jpg";
 
-		$('body').on('mousedown', function(){
-			EventHandlers.onMouseStart;
-		});
-		$('body').on('mouseup', function(){
-			EventHandlers.onMouseEnd;
-		});
-
-		$('body').on('touchstart', function(){
-			EventHandlers.onMouseStart;
-		});
-		$('body').on('touchend', function(){
-			EventHandlers.onMouseEnd;
-		});
-	}
+var Evt = {
+	
 };
 
-$(window).on('load',function(){
-	EventHandlers.registerEventHandlers();
-});
+function onMouseMove(evt) {
+    'use strict';
+    evt.preventDefault();
+}
+
+function onMouseStart(e) {
+    'use strict';
+    e.preventDefault();
+    //console.log('hhh');
+
+    if (e.changedTouches && e.changedTouches.length > 0) {
+        clickX = e.changedTouches[0].pageX;
+        clickY = e.changedTouches[0].pageY;
+    } else {
+        clickX = e.pageX;
+        clickY = e.pageY;
+    }
+
+    mouseIsDown = true;
+}
+
+function onMouseEnd(e) {
+    'use strict';
+    e.preventDefault();
+    mouseIsDown = false;
+
+    if (e.changedTouches && e.changedTouches.length > 0) {
+        releaseX = e.changedTouches[0].pageX;
+        releaseY = e.changedTouches[0].pageY;
+     } else {
+        releaseX = e.pageX;
+        releaseY = e.pageY; 
+    }   
+        
+    var xOry = (Math.abs(releaseX-clickX)>Math.abs(releaseY-clickY)) ? "x" : "y";
+    console.log(xOry);
+    
+    switch (xOry) {
+    	case 'x':
+    		if(releaseX-clickX > 0) {
+    			// increment
+    			console.log("look left:");
+    			document.getElementById("gnome").src = left.src;
+				//reDraw();
+	    	}
+    		else {
+    			// decrement
+    			console.log("look right:");
+    			document.getElementById("gnome").src = right.src;
+				//reDraw();
+    		}
+    	break;
+    	
+    	case 'y':
+    	
+    		if(releaseY-clickY <= 0) {
+    			
+    			console.log("toy gnome is happy...");
+    			document.getElementById("gnome").src = happy.src;
+    		} else {
+    			
+    			console.log("toy gnome is mad...");
+    			document.getElementById("gnome").src = mad.src;
+    		}
+    	break;
+    }
+    
+}	
+
+
+window.addEventListener("load",function(){
+	reDraw();
+},false);
+
+function reDraw(callback) {
+	// var item = vocab[level];
+	// document.getElementById('content').innerHTML = item.words[subIndex];
+	// document.getElementById('level').innerHTML = "Level:" + (level+1) + " use &uarr; &rarr; &darr; &larr;";
+
+	if(callback) {
+		callback();
+	}
+}
+
+function KeyCheck(event) {
+    'use strict';
+    
+    var KeyID = event.keyCode;
+
+    if (KeyID === 39) {
+        console.log('right');
+        reDraw();
+    } else if (KeyID === 37) {
+        console.log('left'); 
+        reDraw();
+    }  else if (KeyID === 38) {
+        console.log('up'); 
+        reDraw();
+    } else if (KeyID === 40) {
+        console.log('down'); 
+        reDraw();
+
+    } else if(KeyID === 32) {
+    	//reDraw(playSound);
+    } else {
+    	//console.log(KeyID);
+    }
+}
+	
+	window.addEventListener('keydown',KeyCheck,true);  
+	
+	document.body.addEventListener('mousemove', onMouseMove, false);
+	document.body.addEventListener('mousedown', onMouseStart, false);
+	document.body.addEventListener('mouseup', onMouseEnd, false);
+	
+	document.body.addEventListener('touchmove', onMouseMove, false);
+	document.body.addEventListener('touchstart', onMouseStart, false);
+	document.body.addEventListener('touchend', onMouseEnd, false);	
