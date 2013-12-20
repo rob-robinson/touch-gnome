@@ -2,6 +2,8 @@
 * app.js for the toy-gnome / gestures project...
 */
 
+navigator.vibrate = navigator.vibrate || navigator.webkitVibrate || navigator.mozVibrate || navigator.msVibrate;
+
 // load four images for the toy gnome's states
 var happy = new Image();
 happy.src = "./img/gnome-happy.jpg";
@@ -26,6 +28,10 @@ var States = {
 	},
 	angry : function(){
 		console.log("toy gnome is mad...");
+		if (navigator.vibrate) {
+    		// vibration API supported
+    		navigator.vibrate(100);
+		}
 		document.getElementById("gnome").src = mad.src;
 	},
 	happy : function(){
