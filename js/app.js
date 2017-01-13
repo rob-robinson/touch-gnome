@@ -23,11 +23,9 @@ start.src = "./img/gnome.jpg";
 
 var States = {
 	start : function(){
-		console.log("toy gnome start state...");
 		document.getElementById("gnome").src = start.src;		
 	},
 	angry : function(){
-		console.log("toy gnome is mad...");
 		if (navigator.vibrate) {
     		// vibration API supported
     		navigator.vibrate(100);
@@ -35,15 +33,12 @@ var States = {
 		document.getElementById("gnome").src = mad.src;
 	},
 	happy : function(){
-		console.log("toy gnome is happy...");
 		document.getElementById("gnome").src = happy.src;		
 	},
 	lookLeft : function(){
-		console.log("look left:");
 		document.getElementById("gnome").src = left.src;
 	},
 	lookRight : function(){
-		console.log("look right:");
 		document.getElementById("gnome").src = right.src;
 	}
 };
